@@ -64,7 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errors['exist_user'] = 'User already registered';
         } else {
             $users[] = [
-                'id' => empty($users) == true ? $id = 1 : $id = count($users) + 1,
+                // 'id' => empty($users) == true ? $id = 1 : $id = count($users) + 1,
+                'id' => uniqid(),
                 'name' => $name,
                 'email' => $email,
                 'password' => $password,
