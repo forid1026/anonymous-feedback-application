@@ -1,6 +1,5 @@
 <?php
 session_start();
-require "./helpers.php";
 $user = '';
 if (isset($_GET['uid'])) {
     $id = $_GET['uid'];

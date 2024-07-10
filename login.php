@@ -1,8 +1,7 @@
 <?php
 session_start();
-require "./helpers.php";
 if (isset($_SESSION['user_id'])) {
-    header("Location:dashboard.php");
+    header("Location:dashboard");
     exit;
 }
 
@@ -39,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         foreach ($users as $user) {
             if ($user['email'] === $email && password_verify($password, $user['password'])) {
                 $_SESSION['user_id'] = $user['id'];
-                header("Location:dashboard.php");
+                header("Location:dashboard");
                 exit;
             } else {
                 $errors['auth_error'] = "Invalid Email or Password!";
@@ -77,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <header class="bg-white">
         <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
             <div class="flex lg:flex-1">
-                <a href="./index.html" class="-m-1.5 p-1.5">
+                <a href="/" class="-m-1.5 p-1.5">
                     <span class="sr-only">TruthWhisper</span>
                     <span class="block font-bold text-lg bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text">TruthWhisper</span>
                 </a>
@@ -91,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </button>
             </div>
             <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-                <a href="./login.php" class="text-sm font-semibold leading-6 text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
+                <a href="/login" class="text-sm font-semibold leading-6 text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
             </div>
         </nav>
         <!-- Mobile menu, show/hide based on menu open state. -->
@@ -100,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="fixed inset-0 z-10"></div>
             <div class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
                 <div class="flex items-center justify-between">
-                    <a href="./index.php" class="-m-1.5 p-1.5">
+                    <a href="/index" class="-m-1.5 p-1.5">
                         <span class="sr-only">TruthWhisper</span>
                         <span class="block font-bold text-xl bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text">TruthWhisper</span>
                     </a>
@@ -114,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="mt-6 flow-root">
                     <div class="-my-6 divide-y divide-gray-500/10">
                         <div class="py-6">
-                            <a href="./login.php" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Log in</a>
+                            <a href="/login" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Log in</a>
                         </div>
                     </div>
                 </div>
@@ -135,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         <div class="mt-10 mx-auto w-full max-w-xl">
 
-                            <?php if ($message) : ?>
+                            <?php if (isset($_SESSION['user_id'])) : ?>
                                 <div class="mt-2 bg-teal-100 border border-teal-200 text-sm text-teal-800 rounded-lg p-4 dark:bg-teal-800/10 dark:border-teal-900 dark:text-teal-500" role="alert">
                                     <span class="font-bold"> <?= $message ?></span>
                                 </div>
@@ -148,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
                             <?php endif ?>
 
-                            <form class="space-y-6" action="login.php" method="POST">
+                            <form class="space-y-6" action="login" method="POST">
                                 <div>
                                     <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
                                     <div class="mt-2">
@@ -175,7 +174,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                             <p class="mt-10 text-center text-sm text-gray-500">
                                 Not a member?
-                                <a href="./register.php" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Register now!</a>
+                                <a href="/register" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Register now!</a>
                             </p>
                         </div>
                     </div>

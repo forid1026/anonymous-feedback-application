@@ -1,40 +1,10 @@
-<?php
-session_start();
-if (!isset($_SESSION['user_id'])) {
-    header("Location:login");
-    exit;
-}
-
-$users = json_decode(file_get_contents('users.json'), true);
-$id = $_SESSION['user_id'];
-
-$user = getUser($users, $id);
-
-$feedbackFile = json_decode(file_get_contents('feedbacks.json'), true);
-
-function getFeedback($feedbacks, $id)
-{
-    $matched_feedback = [];
-    foreach ($feedbacks as $feedback) {
-        if ($feedback['id'] == $id) {
-            $matched_feedback[] = $feedback;
-        }
-    }
-    return $matched_feedback;
-}
-
-$feedbacks = getFeedback($feedbackFile, $id);
-?>
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TruthWhisper - Anonymous Feedback App</title>
+    <title>Anonymous Feedback App</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -42,7 +12,7 @@ $feedbacks = getFeedback($feedbackFile, $id);
     <header class="bg-white">
         <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
             <div class="flex lg:flex-1">
-                <a href="/" class="-m-1.5 p-1.5">
+                <a href="/index" class="-m-1.5 p-1.5">
                     <span class="sr-only">TruthWhisper</span>
                     <span class="block font-bold text-lg bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text">TruthWhisper</span>
                 </a>
@@ -56,12 +26,7 @@ $feedbacks = getFeedback($feedbackFile, $id);
                 </button>
             </div>
             <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-                <span class="text-sm font-semibold leading-6 text-gray-900 mr-2">
-                    <?= $user['name'] ?>
-                </span> |
-                <span class="text-sm font-semibold leading-6 text-gray-900 ml-2">
-                    <a href="logout">Logout</a>
-                </span>
+                <a href="/login" class="text-sm font-semibold leading-6 text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
             </div>
         </nav>
         <!-- Mobile menu, show/hide based on menu open state. -->
@@ -70,7 +35,7 @@ $feedbacks = getFeedback($feedbackFile, $id);
             <div class="fixed inset-0 z-10"></div>
             <div class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
                 <div class="flex items-center justify-between">
-                    <a href="./index.php" class="-m-1.5 p-1.5">
+                    <a href="#" class="-m-1.5 p-1.5">
                         <span class="sr-only">TruthWhisper</span>
                         <span class="block font-bold text-xl bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text">TruthWhisper</span>
                     </a>
@@ -84,7 +49,7 @@ $feedbacks = getFeedback($feedbackFile, $id);
                 <div class="mt-6 flow-root">
                     <div class="-my-6 divide-y divide-gray-500/10">
                         <div class="py-6">
-                            <span class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"><?= $user['name'] ?></span>
+                            <a href="/login" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Log in</a>
                         </div>
                     </div>
                 </div>
@@ -93,27 +58,26 @@ $feedbacks = getFeedback($feedbackFile, $id);
     </header>
 
     <main class="">
-        <div class="relative flex min-h-screen overflow-hidden bg-gray-50 py-6 sm:py-12">
+        <div class="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 py-6 sm:py-12">
             <img src="./images/beams.jpg" alt="" class="absolute top-1/2 left-1/2 max-w-none -translate-x-1/2 -translate-y-1/2" width="1308" />
             <div class="absolute inset-0 bg-[url(./images/grid.svg)] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
-
-            <div class="relative max-w-7xl mx-auto">
-                <div class="flex justify-end">
-                    <span class="block text-gray-600 font-mono border border-gray-400 rounded-xl px-2 py-1">Your feedback form link: <strong>
-                            <a href="./feedback.php?uid=<?= $id ?>">
-                            </a>
-                        </strong></span>
-                </div>
-                <h1 class="text-xl text-indigo-800 text-bold my-10">Received feedback</h1>
-                <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-
-                    <?php foreach ($feedbacks as  $feedback) { ?>
-                        <div class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400">
-                            <div class="focus:outline-none">
-                                <p class="text-gray-500"><?= $feedback['feedback'] ?></p>
+            <div class="relative bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 sm:mx-auto sm:max-w-lg sm:rounded-lg sm:px-10">
+                <div class="mx-auto max-w-md text-center px-">
+                    <h1 class="block font-bold text-3xl bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text">TruthWhisper</h1>
+                    <div class="divide-y divide-gray-300/50">
+                        <div class="space-y-6 py-8 text-base leading-7 text-gray-600 px-12">
+                            <h2>A better way to get anonymous feedback!</h2>
+                            <div class="flex justify-center">
+                                <img class="max-h-72" src="./images/letter.png" alt="">
                             </div>
                         </div>
-                    <?php } ?>
+                        <div class="pt-8 text-base font-semibold leading-7">
+                            <p class="text-gray-900">Sounds interesting?</p>
+                            <p>
+                                <a href="/login" class="text-sky-500 hover:text-sky-600">Let's start!</a>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

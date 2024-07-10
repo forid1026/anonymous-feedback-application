@@ -1,6 +1,5 @@
 <?php
 session_start();
-require "./helpers.php";
 $name = $email = $password = $confirmPassword = '';
 $errors = [];
 
@@ -70,10 +69,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 'email' => $email,
                 'password' => $password,
             ];
+
             file_put_contents('users.json', json_encode($users, JSON_PRETTY_PRINT));
             flash('success', 'User Registered Successfully. Please log in!');
-            header("Location:login.php");
+            header("Location:login");
         }
+    }else{
+        return "somethng went wrong!";
     }
 }
 
@@ -92,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <header class="bg-white">
         <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
             <div class="flex lg:flex-1">
-                <a href="./index.php" class="-m-1.5 p-1.5">
+                <a href="/" class="-m-1.5 p-1.5">
                     <span class="sr-only">TruthWhisper</span>
                     <span class="block font-bold text-lg bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text">TruthWhisper</span>
                 </a>
@@ -106,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </button>
             </div>
             <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-                <a href="./login.php" class="text-sm font-semibold leading-6 text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
+                <a href="/login" class="text-sm font-semibold leading-6 text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
             </div>
         </nav>
         <!-- Mobile menu, show/hide based on menu open state. -->
@@ -129,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="mt-6 flow-root">
                     <div class="-my-6 divide-y divide-gray-500/10">
                         <div class="py-6">
-                            <a href="./login.php" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Log in</a>
+                            <a href="/login" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Log in</a>
                         </div>
                     </div>
                 </div>
@@ -150,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         <div class="mt-10 mx-auto w-full max-w-xl">
                             <?php flash('exist') ?>
-                            <form class="space-y-6" action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
+                            <form class="space-y-6" action="<?= htmlspecialchars('/register') ?>" method="POST">
                                 <div>
                                     <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Name</label>
                                     <div class="mt-2">
@@ -209,7 +211,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                             <p class="mt-10 text-center text-sm text-gray-500">
                                 Already have an account?
-                                <a href="./login.php" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Login!</a>
+                                <a href="/login" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Login!</a>
                             </p>
                         </div>
                     </div>
