@@ -47,18 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         $errors['auth_error'] = "Something Went Wrong. Please try again!";
     }
-
-    // if ($users) {
-    //     if ($user && password_verify($password, $user['password'])) {
-    //         $_SESSION['user_id'] = $user['id'];
-    //         header("Location:dashboard.php");
-    //         exit;
-    //     } else {
-    //         $errors['auth_error'] = "Invalid Email or Password!";
-    //     }
-    // } else {
-    //     $errors['auth_error'] = "Something Went Wrong. Please try again!";
-    // }
 }
 
 ?>
@@ -134,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         <div class="mt-10 mx-auto w-full max-w-xl">
 
-                            <?php if (isset($_SESSION['user_id'])) : ?>
+                            <?php if ($message) : ?>
                                 <div class="mt-2 bg-teal-100 border border-teal-200 text-sm text-teal-800 rounded-lg p-4 dark:bg-teal-800/10 dark:border-teal-900 dark:text-teal-500" role="alert">
                                     <span class="font-bold"> <?= $message ?></span>
                                 </div>

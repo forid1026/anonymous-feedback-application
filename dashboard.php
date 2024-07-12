@@ -5,6 +5,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
+$rootUrl = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'];
 $users = json_decode(file_get_contents('users.json'), true);
 $id = $_SESSION['user_id'];
 
@@ -100,7 +101,8 @@ $feedbacks = getFeedback($feedbackFile, $id);
             <div class="relative max-w-7xl mx-auto">
                 <div class="flex justify-end">
                     <span class="block text-gray-600 font-mono border border-gray-400 rounded-xl px-2 py-1">Your feedback form link: <strong>
-                            <a href="./feedback.php?uid=<?= $id ?>">
+                            <a href="<?= $id ?>/feedback">
+                                <?= $rootUrl .'/'. $id .'/'.'feedback' ?>
                             </a>
                         </strong></span>
                 </div>

@@ -1,48 +1,59 @@
 <?php
 session_start();
 $user = '';
-if (isset($_GET['uid'])) {
-    $id = $_GET['uid'];
-    $users = json_decode(file_get_contents('users.json'), true);
-    $user = getUser($users, $id);
+
+
+$url = parse_url($_SERVER['REQUEST_URI'])['path'];
+$urlPath = explode('/', $url);
+$id = '';
+if ((count($urlPath) > 2) && $urlPath[2] === 'feedback') {
+    $id = $urlPath[1];
 }
 
 
+$users = json_decode(file_get_contents('users.json'), true);
+$user = getUser($users, $id);
+// dd($user);
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+// if (isset($_GET['uid'])) {
+//     $id = $_GET['uid'];
+   
+// }
 
-    if (empty($_POST['feedback'])) {
-        $errors['feedback'] = 'Please write something..';
-    } else {
-        $feedback = sanitize($_POST['feedback']);
-    }
+// if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    if (empty($_POST['id'])) {
-        $errors['id'] = 'User id is required';
-    } else {
-        $id = sanitize($_POST['id']);
-    }
+//     if (empty($_POST['feedback'])) {
+//         $errors['feedback'] = 'Please write something..';
+//     } else {
+//         $feedback = sanitize($_POST['feedback']);
+//     }
 
-    if (empty($errors)) {
-        $id = $_POST['id'];
-        // Check existing file exists or not
-        if (!file_exists('feedbacks.json')) {
-            file_put_contents('feedbacks.json', '[]');
-        }
+//     if (empty($_POST['id'])) {
+//         $errors['id'] = 'User id is required';
+//     } else {
+//         $id = sanitize($_POST['id']);
+//     }
+
+//     if (empty($errors)) {
+//         $id = $_POST['id'];
+//         // Check existing file exists or not
+//         if (!file_exists('feedbacks.json')) {
+//             file_put_contents('feedbacks.json', '[]');
+//         }
 
 
-        $feedbacks = json_decode(file_get_contents('feedbacks.json'), true);
+//         $feedbacks = json_decode(file_get_contents('feedbacks.json'), true);
 
-        $feedbacks[] = [
-            'id' => $id,
-            'feedback' => $feedback
-        ];
-        file_put_contents('feedbacks.json', json_encode($feedbacks, JSON_PRETTY_PRINT));
-        flash('feedback-success', 'Feedback Send Successfully.');
-        header("Location:feedback-success.php");
-    }
-}
-?>
+//         $feedbacks[] = [
+//             'id' => $id,
+//             'feedback' => $feedback
+//         ];
+//         file_put_contents('feedbacks.json', json_encode($feedbacks, JSON_PRETTY_PRINT));
+//         flash('feedback-success', 'Feedback Send Successfully.');
+//         header("Location:feedback-success");
+//     }
+// }
+// ?>
 
 
 <!DOCTYPE php>
@@ -99,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
 
                             <div class="mt-10 mx-auto w-full max-w-xl">
-                                <form class="space-y-6" action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST" novalidate>
+                                <form class="space-y-6" action="<?= htmlspecialchars('/feedback-success') ?>" method="POST" novalidate>
                                     <div>
                                         <label for="feedback" class="block text-sm font-medium leading-6 text-gray-900">Don't hesitate, just do it!</label>
                                         <div class="mt-2">
